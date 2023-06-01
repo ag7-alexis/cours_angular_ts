@@ -1,0 +1,15 @@
+.register {
+  max-width: 450px;
+  margin: 0 auto;
+
+  .register-form {
+    display: flex;
+    gap: 12px;
+    flex-direction: column;
+  }
+}
+
+.success {
+  position: relative;
+  color: var(--tui-success-fill);
+}

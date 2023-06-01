@@ -20,6 +20,7 @@ import { JobOffersComponent } from './page/job-offers/job-offers.component';
 import { JobsComponent } from './page/jobs/jobs.component';
 import { LoginComponent } from './page/login/login.component';
 import {
+  TuiAvatarModule,
   TuiInputModule,
   TuiInputPasswordModule,
   TuiIslandModule,
@@ -27,14 +28,17 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TUI_FRENCH_LANGUAGE, TUI_LANGUAGE } from '@taiga-ui/i18n';
 import { of } from 'rxjs';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+
     RegisterComponent,
     JobOffersComponent,
     JobsComponent,
     LoginComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,6 +57,7 @@ import { of } from 'rxjs';
     TuiButtonModule,
     TuiSvgModule,
     TuiErrorModule,
+    TuiAvatarModule,
   ],
   providers: [
     {

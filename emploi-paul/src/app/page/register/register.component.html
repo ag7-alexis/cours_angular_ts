@@ -1,4 +1,4 @@
-<tui-island class="register">
+<tui-island class="register" *ngIf="state() as state">
   <p class="tui-island__category">
     Créer ton compte pour accéder au offre d'emploi
   </p>
@@ -83,10 +83,19 @@
         ></tui-error>
       </div>
     </div>
-
+    <tui-error
+      *ngIf="state.status === 'register-error'"
+      [error]="state.errorMessage!"
+    ></tui-error>
     <div>
-      <button tuiButton type="submit" appearance="primary" size="m">
-        S'inscrire
+      <button
+        tuiButton
+        type="submit"
+        appearance="primary"
+        size="m"
+        [showLoader]="state.status === 'register-ongoing'"
+      >
+        M'inscrire
       </button>
     </div>
   </form>

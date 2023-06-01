@@ -1,5 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RegisterSandbox, UserCredential } from './register.sandbox';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -8,10 +12,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { RegisterSandbox, UserCredential } from './register.sandbox';
 
 @Component({
-  selector: 'app-register',
+  selector: 'page-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
   providers: [RegisterSandbox],
@@ -43,28 +47,28 @@ export class RegisterComponent {
     confirmPassword: this.confirmPassword,
   });
 
-  constructor(
-    private readonly sandbox: RegisterSandbox,
-    private router: Router
-  ) {}
+  private readonly sandbox = inject(RegisterSandbox);
 
-  handleSubmitRegister() {
+  state = this.sandbox.state;
+
+  constructor(private router: Router) {
+    effect(() => {
+      if (this.sandbox.state().status === 'register-success') {
+        this.router.navigate(['jobs']);
+      }
+    });
+  }
+
+  async handleSubmitRegister() {
     if (this.registerForm.invalid) {
       return;
     }
 
     const userCredentialCandidate: UserCredential = {
       emailAddress: this.registerForm.value.emailAddress!,
-      password: this.registerForm.value.emailAddress!,
+      password: this.registerForm.value.password!,
     };
 
-    this.sandbox
-      .register(userCredentialCandidate)
-      .pipe(
-        tap({
-          next: () => this.router.navigate(['jobs']),
-        })
-      )
-      .subscribe();
+    await this.sandbox.register(userCredentialCandidate);
   }
 }

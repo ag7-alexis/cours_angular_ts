@@ -11,7 +11,7 @@ import {
 import { JobOffersComponent } from './page/job-offers/job-offers.component';
 
 const redirectToLogin = () => redirectUnauthorizedTo(['login']);
-const redirectToHome = () => redirectLoggedInTo(['home']);
+const redirectToHome = () => redirectLoggedInTo(['']);
 
 const routes: Routes = [
   {

@@ -1,0 +1,13 @@
+<h2>Sign up</h2>
+<form (ngSubmit)="register()" [formGroup]="registerForm">
+  <div>
+    <label>Login</label><input formControlName="login" />
+    <div *ngIf="registerForm.get('login')?.errors" class="alert">
+      <div>Login is required.</div>
+    </div>
+  </div>
+  <div>
+    <label>Password</label><input type="password" formControlName="password" />
+  </div>
+  <button type="submit">Register</button>
+</form>

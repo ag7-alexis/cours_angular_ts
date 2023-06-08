@@ -1,0 +1,76 @@
+<ng-container *ngIf="state() as state">
+  <ng-container [ngSwitch]="state.mode">
+    <progress
+      *ngSwitchCase="'loading'"
+      tuiProgressBar
+      max="100"
+      size="s"
+      class="progress"
+    ></progress>
+
+    <tui-island *ngSwitchCase="'loaded'">
+      <p class="tui-island__category">Offres d'emploi</p>
+      <h1 class="tui-island__title">{{ state.profession }}</h1>
+
+      <div class="list-job-offers">
+        <tui-island *ngFor="let jobOffer of state.jobOffers" class="job-offer">
+          <div class="tui-island__content">
+            <figure *ngIf="jobOffer.company.logo" class="tui-island__figure">
+              <img
+                class="job-offer__company-logo"
+                [src]="jobOffer.company.logo"
+                alt=""
+              />
+            </figure>
+            <div>
+              <p class="tui-island__category">{{ jobOffer.company.name }}</p>
+              <h3 class="tui-island__title">{{ jobOffer.title }}</h3>
+            </div>
+          </div>
+          <button
+            tuiButton
+            type="button"
+            appearance="flat"
+            size="m"
+            class="tui-island__footer-button job-offer__cta"
+            (click)="showDialog(jobOffer)"
+          >
+            Voir plus
+          </button>
+        </tui-island>
+      </div>
+    </tui-island>
+
+    <tui-notification
+      *ngSwitchCase="'error'"
+      status="error"
+      class="tui-space_top-4"
+    >
+      Une erreur est survenu lors du chargement des données
+    </tui-notification>
+
+    <tui-notification
+      *ngSwitchCase="'timeout-error'"
+      status="error"
+      class="tui-space_top-4"
+    >
+      Le serveur à mis trop de temps à répondre
+    </tui-notification>
+  </ng-container>
+</ng-container>
+
+<ng-template #dialogContent let-context>
+  <div *ngIf="state().selectedJobOffer as jobOffer">
+    <p class="tui-text_body-s">{{ jobOffer.company.name }}</p>
+    <span class="tui-text_h5">{{ jobOffer.title }}</span>
+    <p class="tui-text_body-s-2">{{ jobOffer.job.description }}</p>
+    <button
+      tuiButton
+      type="button"
+      size="m"
+      (click)="saveJobOffer(); context.complete()"
+    >
+      Enregistrer
+    </button>
+  </div>
+</ng-template>

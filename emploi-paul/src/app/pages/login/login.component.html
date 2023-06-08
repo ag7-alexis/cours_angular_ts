@@ -1,0 +1,77 @@
+<tui-island class="login" *ngIf="state() as state">
+  <p class="tui-island__category">
+    Me connecter pour accéder au offre d'emploi
+  </p>
+  <h3 class="tui-island__title">Connection</h3>
+
+  <form
+    [formGroup]="loginForm"
+    #ngLoginForm="ngForm"
+    (ngSubmit)="handleSubmitLogin()"
+    class="tui-island__paragraph login-form"
+  >
+    <div>
+      <tui-input
+        formControlName="emailAddress"
+        [tuiTextfieldCleaner]="true"
+        [tuiTextfieldCustomContent]="emailAddress.valid ? success : ''"
+        [formControl]="emailAddress"
+        ngDefaultControl
+      >
+        Adresse email
+        <span class="tui-required"></span>
+        <input tuiTextfield placeholder="mail@mail.fr" type="email" />
+      </tui-input>
+      <div *ngIf="ngLoginForm.submitted && emailAddress.errors">
+        <tui-error
+          *ngIf="emailAddress.errors?.['required']"
+          [error]="'Champ requis'"
+        ></tui-error>
+        <tui-error
+          *ngIf="emailAddress.errors?.['email']"
+          [error]="'Format d\'adresse email invalid'"
+        ></tui-error>
+      </div>
+    </div>
+
+    <div>
+      <tui-input-password
+        formControlName="password"
+        [tuiTextfieldCleaner]="true"
+        [tuiTextfieldCustomContent]="password.valid ? success : ''"
+        [formControl]="password"
+        ngDefaultControl
+        >Mot de passe<span class="tui-required"></span
+      ></tui-input-password>
+      <div *ngIf="ngLoginForm.submitted && password.errors">
+        <tui-error
+          *ngIf="password.errors?.['required']"
+          [error]="'Champ requis'"
+        ></tui-error>
+      </div>
+    </div>
+    <tui-error
+      *ngIf="state.status === 'login-error'"
+      [error]="state.errorMessage!"
+    ></tui-error>
+    <div>
+      <button
+        tuiButton
+        type="submit"
+        appearance="primary"
+        size="m"
+        [showLoader]="state.status === 'login-ongoing'"
+      >
+        Me connecter
+      </button>
+    </div>
+  </form>
+
+  <p class="tui-island__paragraph tui-island__paragraph_link">
+    <a routerLink="/register" tuiLink>M'inscrire</a>
+  </p>
+</tui-island>
+
+<ng-template #success>
+  <tui-svg src="tuiIconCheckLarge" class="success tui-space_left-3"></tui-svg>
+</ng-template>

@@ -1,0 +1,15 @@
+.login {
+  max-width: 450px;
+  margin: 0 auto;
+
+  .login-form {
+    display: flex;
+    gap: 12px;
+    flex-direction: column;
+  }
+}
+
+.success {
+  position: relative;
+  color: var(--tui-success-fill);
+}

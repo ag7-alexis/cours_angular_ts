@@ -2,9 +2,7 @@
 
 ## Etudiant
 
-GUAY Alexis
-M2 IW
-Angular en entreprise
+GUAY Alexis | M2 IW | Angular en entreprise
 
 ## Commentaire
 

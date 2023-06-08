@@ -12,7 +12,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { RegisterSandbox, UserCredential } from './register.sandbox';
+import { RegisterSandbox } from './register.sandbox';
+import { UserCredential } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'page-register',
@@ -51,10 +52,20 @@ export class RegisterComponent {
 
   state = this.sandbox.state;
 
-  constructor(private router: Router) {
+  constructor(router: Router) {
     effect(() => {
       if (this.sandbox.state().status === 'register-success') {
-        this.router.navigate(['jobs']);
+        const redirectToUrl = new URL(
+          router.routerState.snapshot.url,
+          location.origin
+        );
+        const params = new URLSearchParams(redirectToUrl.search);
+        const redirectTo = params.get('redirectTo');
+        if (redirectTo) {
+          router.navigate([redirectTo]);
+        } else {
+          router.navigate(['']);
+        }
       }
     });
   }

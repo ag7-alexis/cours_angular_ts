@@ -1,0 +1,90 @@
+<ng-container *ngIf="state() as state">
+  <ng-container [ngSwitch]="state.mode">
+    <progress
+      *ngSwitchCase="'loading'"
+      tuiProgressBar
+      max="100"
+      size="s"
+      class="progress"
+    ></progress>
+
+    <tui-island *ngSwitchCase="'loaded'">
+      <h1 class="tui-island__title">Mes offres d'emplois</h1>
+
+      <div class="list-job-offers">
+        <tui-island
+          *ngFor="let savedJobOffer of state.savedJobOffers"
+          class="job-offer"
+        >
+          <div class="tui-island__content">
+            <figure
+              *ngIf="savedJobOffer.jobOffer.company.logo"
+              class="tui-island__figure"
+            >
+              <img
+                class="job-offer__company-logo"
+                [src]="savedJobOffer.jobOffer.company.logo"
+                alt=""
+              />
+            </figure>
+            <div>
+              <p class="tui-island__category">
+                {{ savedJobOffer.jobOffer.company.name }}
+              </p>
+              <h3 class="tui-island__title">
+                {{ savedJobOffer.jobOffer.title }}
+              </h3>
+            </div>
+          </div>
+          <a
+            tuiButton
+            type="button"
+            appearance="flat"
+            size="m"
+            class="tui-island__footer-button job-offer__cta"
+            [routerLink]="['/saved-job-offers', savedJobOffer.id]"
+          >
+            Voir plus
+          </a>
+        </tui-island>
+      </div>
+    </tui-island>
+
+    <tui-notification
+      *ngSwitchCase="'error'"
+      status="error"
+      class="tui-space_top-4"
+    >
+      Une erreur est survenu lors du chargement des données
+    </tui-notification>
+
+    <tui-notification
+      *ngSwitchCase="'timeout-error'"
+      status="error"
+      class="tui-space_top-4"
+    >
+      Le serveur à mis trop de temps à répondre
+    </tui-notification>
+  </ng-container>
+</ng-container>
+
+<ng-template #dialogContent let-context>
+  <div *ngIf="state().selectedSavedJobOffer as savedJobOffer; else close">
+    <p class="tui-text_body-s">{{ savedJobOffer.jobOffer.company.name }}</p>
+    <span class="tui-text_h5">{{ savedJobOffer.jobOffer.title }}</span>
+    <p class="tui-text_body-s-2">
+      {{ savedJobOffer.jobOffer.job.description }}
+    </p>
+
+    <button
+      tuiButton
+      type="button"
+      appearance="accent"
+      (click)="deleteSavedJobOffer()"
+    >
+      Supprimer
+    </button>
+  </div>
+
+  <ng-template #close>{{ context.complete() }} </ng-template>
+</ng-template>

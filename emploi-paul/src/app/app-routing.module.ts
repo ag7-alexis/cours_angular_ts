@@ -1,23 +1,33 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { JobsComponent } from './page/jobs/jobs.component';
-import { LoginComponent } from './page/login/login.component';
-import { RegisterComponent } from './page/register/register.component';
+import {
+  ActivatedRouteSnapshot,
+  RouterModule,
+  RouterStateSnapshot,
+  Routes,
+} from '@angular/router';
+import { HomeComponent } from './pages/home/home.component';
+import { LoginComponent } from './pages/login/login.component';
+import { RegisterComponent } from './pages/register/register.component';
 import {
   canActivate,
   redirectUnauthorizedTo,
   redirectLoggedInTo,
 } from '@angular/fire/auth-guard';
-import { JobOffersComponent } from './page/job-offers/job-offers.component';
+import { JobOffersComponent } from './pages/job-offers/job-offers.component';
+import { SavedJobOffersComponent } from './pages/saved-job-offers/saved-job-offers.component';
+const redirectUnauthorizedToLogin = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
+  return redirectUnauthorizedTo(`/login?redirectTo=${state.url}`);
+};
 
-const redirectToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectToHome = () => redirectLoggedInTo(['']);
 
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    component: JobsComponent,
+    component: HomeComponent,
   },
   {
     path: 'login',
@@ -30,9 +40,23 @@ const routes: Routes = [
     ...canActivate(redirectToHome),
   },
   {
-    path: 'job/:slug',
+    path: 'job-offers/:profession',
     component: JobOffersComponent,
-    ...canActivate(redirectToLogin),
+    ...canActivate(redirectUnauthorizedToLogin),
+  },
+  {
+    path: 'saved-job-offers',
+    component: SavedJobOffersComponent,
+    ...canActivate(redirectUnauthorizedToLogin),
+  },
+  {
+    path: 'saved-job-offers/:savedJobOfferId',
+    component: SavedJobOffersComponent,
+    ...canActivate(redirectUnauthorizedToLogin),
+  },
+  {
+    path: '**',
+    redirectTo: '',
   },
 ];
 

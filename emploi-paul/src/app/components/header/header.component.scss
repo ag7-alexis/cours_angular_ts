@@ -1,0 +1,23 @@
+@import "@taiga-ui/core/styles/taiga-ui-local.scss";
+
+.header {
+  @include shadow(2);
+
+  &__container {
+    padding: 8px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__brand {
+    text-decoration: none;
+    color: var(--tui-text-01);
+  }
+
+  &__auth-user {
+    display: flex;
+    gap: 8px;
+  }
+}

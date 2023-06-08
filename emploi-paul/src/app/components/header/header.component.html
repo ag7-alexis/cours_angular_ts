@@ -1,0 +1,45 @@
+<div class="header">
+  <div class="header__container">
+    <div>
+      <a routerLink="/" class="header__brand">
+        <span class="tui-text_h3">Emploi paul</span></a
+      >
+    </div>
+    <div>
+      <div *ngIf="user() as user; else auth" class="header__auth-user">
+        <a
+          size="m"
+          tuiButton
+          type="button"
+          class=""
+          appearance="outline"
+          routerLink="/saved-job-offers"
+          >Mes offres</a
+        >
+
+        <tui-avatar size="m" [text]="user!.email!"></tui-avatar>
+        <button
+          size="m"
+          tuiIconButton
+          type="button"
+          class=""
+          appearance="outline"
+          icon="tuiIconPower"
+          (click)="logout()"
+        ></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #auth>
+  <a
+    size="m"
+    tuiIconButton
+    type="button"
+    class=""
+    appearance="secondary"
+    icon="tuiIconPower"
+    routerLink="/login"
+  ></a>
+</ng-template>

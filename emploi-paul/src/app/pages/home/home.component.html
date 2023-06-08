@@ -1,0 +1,75 @@
+<ng-container *ngIf="state() as state">
+  <ng-container [ngSwitch]="state.mode">
+    <progress
+      *ngSwitchCase="'loading'"
+      tuiProgressBar
+      max="100"
+      size="s"
+      class="progress"
+    ></progress>
+
+    <tui-island *ngSwitchCase="'loaded'" class="home">
+      <p class="tui-island__category">
+        Un pas de plus vers l'alternance de tes rêves
+      </p>
+      <h1 class="tui-island__title">Quel métier t'intéresserais ?</h1>
+
+      <tui-input tuiTextfieldIconLeft="tuiIconSearchLarge" [(ngModel)]="search">
+        Search
+      </tui-input>
+      <table
+        tuiTable
+        class="tui-space_top-4 profession-table"
+        [columns]="columns"
+      >
+        <thead>
+          <tr tuiThGroup>
+            <th tuiTh>Métier</th>
+            <th tuiTh></th>
+          </tr>
+        </thead>
+        <tbody
+          tuiTbody
+          *tuiLet="state.professions | filterIgnoreCaseLike : search as data"
+          [data]="data"
+        >
+          <tr tuiTr *ngFor="let profession of data">
+            <td
+              tuiTd
+              *tuiCell="'profession'"
+              [tuiHighlight]="search"
+              [tuiHighlightColor]="'var(--tui-positive-hover)'"
+            >
+              {{ profession }}
+            </td>
+            <td tuiTd *tuiCell="'action'" class="job-offers-action">
+              <button
+                tuiIconButton
+                size="s"
+                type="button"
+                [icon]="'tuiIconEye'"
+                (click)="goForJobOffers(profession)"
+              ></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </tui-island>
+
+    <tui-notification
+      *ngSwitchCase="'error'"
+      status="error"
+      class="tui-space_top-4"
+    >
+      Une erreur est survenu lors du chargement des données
+    </tui-notification>
+
+    <tui-notification
+      *ngSwitchCase="'timeout-error'"
+      status="error"
+      class="tui-space_top-4"
+    >
+      Le serveur à mis trop de temps à répondre
+    </tui-notification>
+  </ng-container>
+</ng-container>

@@ -6,7 +6,8 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginSandbox, UserCredential } from './login.sandbox';
+import { LoginSandbox } from './login.sandbox';
+import { UserCredential } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'page-login',
@@ -34,10 +35,20 @@ export class LoginComponent {
 
   state = this.sandbox.state;
 
-  constructor(private router: Router) {
+  constructor(router: Router) {
     effect(() => {
       if (this.sandbox.state().status === 'login-success') {
-        this.router.navigate(['']);
+        const redirectToUrl = new URL(
+          router.routerState.snapshot.url,
+          location.origin
+        );
+        const params = new URLSearchParams(redirectToUrl.search);
+        const redirectTo = params.get('redirectTo');
+        if (redirectTo) {
+          router.navigate([redirectTo]);
+        } else {
+          router.navigate(['']);
+        }
       }
     });
   }

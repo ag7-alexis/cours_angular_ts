@@ -1,11 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { FirebaseError } from '@angular/fire/app';
-import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
-
-export interface UserCredential {
-  emailAddress: string;
-  password: string;
-}
+import { AuthService, UserCredential } from 'src/app/services/auth.service';
 
 /**
  * Class that manage state of our component to know 100% of what we are doing
@@ -49,16 +44,13 @@ export class RegisterState {
 export class RegisterSandbox {
   state = signal(RegisterState.initialize());
 
-  constructor(private readonly auth: Auth) {}
+  constructor(private readonly authService: AuthService) {}
 
   async register(userCredential: UserCredential): Promise<void> {
     this.state.update((s) => s.registerOngoing());
     try {
-      await createUserWithEmailAndPassword(
-        this.auth,
-        userCredential.emailAddress,
-        userCredential.password
-      );
+      await this.authService.registerUser(userCredential);
+
       this.state.update((s) => s.registerSuccess());
     } catch (e) {
       this.state.update((s) => s.registerError(e));
